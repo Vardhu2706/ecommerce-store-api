@@ -1,3 +1,7 @@
+"""
+Discount lifecycle: 
+Creation on Nth order, admin approval/rejection/revert, and redepmtion.
+"""
 import logging 
 import config 
 import store
@@ -11,6 +15,10 @@ logger = logging.getLogger(__name__)
 
 
 def create_pending_discount_if_eligible(user_id: str, order_id: str) -> Discount | None:
+    """
+    Create a pending discount after every Nth completed order.
+    (Configured by DISCOUNT_EVERY_N)
+    """
     count = store.user_order_counts.get(user_id, 0)
     if count == 0 or count % config.DISCOUNT_EVERY_N != 0:
         return None
@@ -37,6 +45,10 @@ def create_pending_discount_if_eligible(user_id: str, order_id: str) -> Discount
 
 
 def approve_discount(discount_id: str) -> Discount:
+    """
+    Generate a discount code and mark the discount as approved.
+    Only valid from pending_approval.
+    """
     discount = store.discounts.get(discount_id)
 
     if discount is None:
@@ -59,6 +71,10 @@ def approve_discount(discount_id: str) -> Discount:
 
 
 def reject_discount(discount_id: str) -> Discount: 
+    """
+    Mark the discount as rejected. 
+    Only valid from pending_approval.
+    """
     discount = store.discounts.get(discount_id)
 
     if discount is None:
@@ -78,6 +94,10 @@ def reject_discount(discount_id: str) -> Discount:
 
 
 def revert_discount(discount_id: str) -> Discount:
+    """
+    Return a discount to pending_approval from approved or rejected.
+    Cannot revert used discounts.
+    """
     discount = store.discounts.get(discount_id)
 
     if discount is None:
@@ -101,6 +121,9 @@ def revert_discount(discount_id: str) -> Discount:
 
 
 def get_redeemable_discount_for_user(user_id: str) -> Discount | None:
+    """
+    Return the oldest approved, unused discount for the user.
+    """
     redeemable = [
         d for d in store.discounts.values()
         if d.user_id == user_id and d.status == 'approved' and d.used_in_order_id is None

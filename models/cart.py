@@ -14,4 +14,4 @@ class Cart(BaseModel):
     user_id: str
     items: list[CartItem] = []
     status: Literal['active', 'checked_out'] = 'active'
-    create_at: datetime
+    created_at: datetime

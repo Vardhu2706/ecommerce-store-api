@@ -1,3 +1,6 @@
+"""
+Unit tests for discount_service - covers the full lifecycle: creation, approval, rejection, revert, and redemption.
+"""
 import pytest
 import config
 import store
@@ -9,6 +12,9 @@ from services import discount_service
 
 @pytest.fixture(autouse=True)
 def reset_store():
+    """
+    Reset the in-memory store to clean a state before every test.
+    """
     store.products = {'prod_1': Product(id='prod_1', name='Widget', price=10.0)}
     store.carts = {}
     store.active_carts = {}
@@ -18,6 +24,9 @@ def reset_store():
 
 
 def test_nth_order_triggers_discount_creation():
+    """
+    
+    """
     store.user_order_counts['user_1'] = 5
     discount_service.create_pending_discount_if_eligible('user_1', 'order_5')    
     pending = [d for d in store.discounts.values() if d.user_id == 'user_1']
@@ -28,6 +37,9 @@ def test_nth_order_triggers_discount_creation():
 
 
 def test_each_eligible_order_creates_a_separate_discount():
+    """
+    Each Nth-order milestone produces its own distinct discount, not a replacement of the previous one.
+    """
     store.user_order_counts['user_1'] = 5
     discount_service.create_pending_discount_if_eligible('user_1', 'order_5')
     store.user_order_counts['user_1'] = 10
@@ -39,6 +51,9 @@ def test_each_eligible_order_creates_a_separate_discount():
 
 
 def test_approve_generates_codes():
+    """
+    Approving a discount sets its status to 'approved' and populates code and approved_at.
+    """
     store.user_order_counts["user_1"] = 5
     discount_service.create_pending_discount_if_eligible("user_1", "order_5")
     disc_id = list(store.discounts.keys())[0]
@@ -50,6 +65,9 @@ def test_approve_generates_codes():
 
 
 def test_rejects_sets_status():
+    """
+    Rejecting a pending discount marks it 'rejected' without generating a code.
+    """
     store.user_order_counts["user_1"] = 5
     discount_service.create_pending_discount_if_eligible("user_1", "order_5")
     disc_id = list(store.discounts.keys())[0]
@@ -59,6 +77,9 @@ def test_rejects_sets_status():
 
 
 def test_revert_from_approved_resets_code_and_status():
+    """
+    Reverting an approved discount clears its code and approved_at, returning it to pending_approval.
+    """
     store.user_order_counts['user_1'] = 5
     discount_service.create_pending_discount_if_eligible('user_1', 'order_5')
     discount_id = list(store.discounts.keys())[0]
@@ -70,6 +91,9 @@ def test_revert_from_approved_resets_code_and_status():
 
 
 def test_revert_from_rejected_resets_status():
+    """
+    A rejected discount can be reverted back to pending_approval, allowing for review again.
+    """
     store.user_order_counts['user_1'] = 5
     discount_service.create_pending_discount_if_eligible('user_1', 'order_5')
     discount_id = list(store.discounts.keys())[0]
@@ -80,6 +104,9 @@ def test_revert_from_rejected_resets_status():
 
 
 def test_cannot_revert_used_discount():
+    """
+    A discount that has already been used for an order cannot be reverted.
+    """
     store.user_order_counts['user_1'] = 5
     discount_service.create_pending_discount_if_eligible('user_1', 'order_5')
     discount_id = list(store.discounts.keys())[0]
@@ -90,6 +117,10 @@ def test_cannot_revert_used_discount():
 
 
 def test_discount_percentage_copied_from_config_at_creation():
+    """
+    The percentage is snapshotted form config at creation time.
+    Later config changes don't affect it.
+    """
     original = config.DISCOUNT_PERCENTAGE
     config.DISCOUNT_PERCENTAGE = 25.0
     store.user_order_counts['user_1'] = 5
@@ -101,6 +132,9 @@ def test_discount_percentage_copied_from_config_at_creation():
 
 
 def test_get_redeemable_discount_returns_oldest_when_multiple_approved():
+    """
+    When the user has multiple approved discounts, the oldest one is returned first (FIFO).
+    """
     store.user_order_counts['user_1'] = 5
     discount_service.create_pending_discount_if_eligible('user_1', 'order_5')
     store.user_order_counts['user_1'] = 10
@@ -115,6 +149,9 @@ def test_get_redeemable_discount_returns_oldest_when_multiple_approved():
 
 
 def test_get_redeemable_discount_returns_none_when_none_approved():
+    """
+    A discount in pending_approval is not redeemable, the function returns None.
+    """
     store.user_order_counts['user_1'] = 5
     discount_service.create_pending_discount_if_eligible('user_1', 'order_5')
     

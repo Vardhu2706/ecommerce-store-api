@@ -4,7 +4,7 @@ from models.order import Order
 from models.product import Product
 
 
-products: dict[str, dict] = {
+products: dict[str, Product] = {
     "prod_1": Product(id="prod_1", name="Wireless Headphones", price=79.99),
     "prod_2": Product(id="prod_2", name="Mechanical Keyboard", price=129.99),
     "prod_3": Product(id="prod_3", name="USB-C Hub", price=49.99),
