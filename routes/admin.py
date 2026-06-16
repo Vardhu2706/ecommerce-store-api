@@ -168,9 +168,13 @@ def list_orders(
         'page_size': page_size,
         'results': [
             {
-                'order_id': o.id,
-                'user_id': o.user_id,
-
+                "order_id": o.id,
+                "user_id": o.user_id,
+                "total": o.total,
+                "discount_applied": o.discount_amount > 0,
+                "discount_amount": o.discount_amount,
+                "final_total": o.final_total,
+                "created_at": o.created_at,
             }
             for o in page_orders
         ]

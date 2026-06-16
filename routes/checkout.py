@@ -5,7 +5,7 @@ import logging
 
 from fastapi import APIRouter, Header, HTTPException
 from services import checkout_service
-
+from utils.helpers import build_enriched_items
 
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=["Checkout"])
@@ -32,13 +32,15 @@ def preview(x_user_id: str | None = Header(default=None)):
     user_id = _get_required_user_id(x_user_id)
 
     try:
-        return checkout_service.get_checkout_preview(user_id)
+        result = checkout_service.get_checkout_preview(user_id)
     except ValueError as e:
         logger.warning('Checkout preview failed: user_id=%s error=%s', user_id, e)
         raise HTTPException(
             status_code=400,
             detail=str(e)
         )
+    result["items"] = build_enriched_items(result["items"])
+    return result
     
 
 @router.post('/checkout/confirm')
@@ -56,10 +58,10 @@ def confirm(x_user_id: str | None = Header(default=None)):
     
     return {
         'order_id': order.id,
-        'items': order.items,
+        "items": build_enriched_items(order.items),
         'total': order.total,
         'discount_applied': order.discount_amount > 0,
         'discount_amount': order.discount_amount,
         'final_total': order.final_total,
         'created_at': order.created_at
-    }
+    }   

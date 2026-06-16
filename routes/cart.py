@@ -3,8 +3,8 @@ Cart management endpoints.
 The caller is identified by the X-User-Id request header.
 """
 import logging
-import store
 
+from utils.helpers import build_enriched_items
 from fastapi import APIRouter, Header, HTTPException
 from pydantic import BaseModel
 from services import cart_service
@@ -26,17 +26,7 @@ def _build_cart_response(user_id: str):
             'total': 0.0
         }
     
-    items = [
-        {
-            'product_id': item.product_id,
-            'name': store.products[item.product_id].name if item.product_id in store.products else item.product_id,
-            'quantity': item.quantity,
-            'price_at_add': item.price_at_add,
-            'subtotal': round(item.quantity * item.price_at_add, 2)
-        }
-        for item in cart.items
-    ]
-
+    items = build_enriched_items(cart.items)
     total = round(sum(i['subtotal'] for i in items), 2)
     return {
         'cart_id': cart.id,

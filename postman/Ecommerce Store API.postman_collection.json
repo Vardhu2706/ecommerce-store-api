@@ -1,0 +1,686 @@
+{
+  "info": {
+    "_postman_id": "360eaabf-aa67-47b7-b04f-95629edb719f",
+    "name": "Ecommerce Store API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "12753050",
+    "_collection_link": "https://go.postman.co/collection/12753050-360eaabf-aa67-47b7-b04f-95629edb719f?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "01 - Products",
+      "item": [
+        {
+          "name": "1 - List Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products"
+              ]
+            },
+            "description": "Returns all seeded products available in the store.  \nNo auth required."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "02 - Cart Flow",
+      "item": [
+        {
+          "name": "1 - Add First Item",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "X-User-Id",
+                "value": "{{user_id}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"product_id\": \"prod_1\",\r\n  \"quantity\": 2\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/cart/items",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "cart",
+                "items"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2 - Add Second Item",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "X-User-Id",
+                "value": "{{user_id}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"product_id\": \"prod_1\",\r\n  \"quantity\": 2\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/cart/items",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "cart",
+                "items"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3 - View Cart",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{user_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/cart",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "cart"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4 - Update Item Quantity",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{user_id}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"quantity\": 3\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/cart/items/prod_1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "cart",
+                "items",
+                "prod_1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5 - Remove Item",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{user_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/cart/items/prod_2",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "cart",
+                "items",
+                "prod_2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "6 - View Updated Cart",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{user_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/cart",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "cart"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "03 - Checkout (No Discount)",
+      "item": [
+        {
+          "name": "1 - Preview (No Discount)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{user_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/checkout/preview",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "checkout",
+                "preview"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2 - Confirm Order",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{user_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/checkout/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "checkout",
+                "confirm"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "04 - Trigger Discount (Orders 2-5)",
+      "item": [
+        {
+          "name": "1 - Quick Checkout (Repeat)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{user_id}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"product_id\": \"prod_3\",\r\n  \"quantity\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/cart/items",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "cart",
+                "items"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2 - Confirm Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{user_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/checkout/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "checkout",
+                "confirm"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "05 - Admin - Discount Management",
+      "item": [
+        {
+          "name": "1 - List Discounts",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "pm.collectionVariables.set(\"discount_id\", response.results[0].id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Admin-Key",
+                "value": "{{admin_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/discounts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "discounts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2 - Reject Discount",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "X-Admin-Key",
+                "value": "{{admin_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/discounts/{{discount_id}}/reject",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "discounts",
+                "{{discount_id}}",
+                "reject"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3 - Revert DIscount",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "X-Admin-Key",
+                "value": "{{admin_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/discounts/{{discount_id}}/revert",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "discounts",
+                "{{discount_id}}",
+                "revert"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4 - Approve Discount",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "X-Admin-Key",
+                "value": "{{admin_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/discounts/{{discount_id}}/approve",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "discounts",
+                "{{discount_id}}",
+                "approve"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Filter By Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Admin-Key",
+                "value": "{{admin_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/discounts?status=pending_approval",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "discounts"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "pending_approval"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "06 - Checkout (With Discount)",
+      "item": [
+        {
+          "name": "1 - Add Item Before Discount Checkout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "X-User-Id",
+                "value": "{{user_id}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"product_id\": \"prod_1\",\r\n  \"quantity\": 2\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/cart/items",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "cart",
+                "items"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2 - Preview Checkout",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{user_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/checkout/preview",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "checkout",
+                "preview"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3 - Confirm Checkout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{user_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/checkout/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "checkout",
+                "confirm"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "07 - My Orders",
+      "item": [
+        {
+          "name": "List My Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "user_1",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/orders",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "08 - Admin - Stats & Orders",
+      "item": [
+        {
+          "name": "1 - All orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Admin-Key",
+                "value": "{{admin_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/orders",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "orders"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2 - Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Admin-Key",
+                "value": "{{admin_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/stats",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "stats"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "last_order_id",
+      "value": ""
+    },
+    {
+      "key": "discount_id",
+      "value": ""
+    }
+  ]
+}
