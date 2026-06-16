@@ -44,9 +44,9 @@ def add_item(user_id: str, product_id: str, quantity: int) -> Cart:
     """
     product = store.products.get(product_id)
     if product is None:
-        raise KeyError(f'Product {product_id} not found.')
+        raise KeyError(f'Product {product_id} not found')
     if quantity < 1:
-        raise ValueError('Quantity must be at least 1.')
+        raise ValueError('Quantity must be at least 1')
     
     cart = _get_or_create_cart(user_id)
 
@@ -86,11 +86,11 @@ def update_item(user_id: str, product_id: str, quantity: int) -> Cart:
     Raises KeyError if cart or item is missing.
     """
     if quantity < 1:
-        raise ValueError('Quantity must be at least 1.')
+        raise ValueError('Quantity must be at least 1')
     
     cart = _get_active_cart(user_id)
     if cart is None:
-        raise KeyError('No active cart.')
+        raise KeyError('No active cart')
     
     for item in cart.items:
         if item.product_id == product_id:
@@ -113,7 +113,7 @@ def remove_item(user_id: str, product_id: str) -> Cart:
     """
     cart = _get_active_cart(user_id)
     if cart is None:
-        raise KeyError('No active carts.')
+        raise KeyError('No active carts')
     
     for item in cart.items:
         if item.product_id == product_id:
@@ -121,7 +121,7 @@ def remove_item(user_id: str, product_id: str) -> Cart:
             logger.info('Cart item removed: user_id=%s product_id=%s', user_id, product_id)
             return cart
         
-    raise KeyError(f'Product {product_id} not in cart.')
+    raise KeyError(f'Product {product_id} not in cart')
 
 
 def clear_cart(user_id: str) -> Cart:
@@ -130,7 +130,7 @@ def clear_cart(user_id: str) -> Cart:
     """
     cart = _get_active_cart(user_id)
     if cart is None:
-        raise KeyError('No active cart.')
+        raise KeyError('No active cart')
     
     cart.items.clear()
     logger.info('Cart cleared: user_id=%s cart_id=%s', user_id, cart.id)
