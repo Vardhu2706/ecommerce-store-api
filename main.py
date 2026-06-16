@@ -11,7 +11,6 @@ from routes import admin, cart, checkout, orders, products
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIASGIMiddleware
-from slowapi.util import get_remote_address
 
 
 logging.basicConfig(
@@ -32,7 +31,14 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title='Ecommerce Store API', lifespan=lifespan)
 
 
-limiter = Limiter(key_func=get_remote_address, default_limits=[config.RATE_LIMIT_DEFAULT])
+def get_real_ip(request: Request) -> str:
+    forwarded_for = request.headers.get("X-Forwarded-For")
+    if forwarded_for:
+        return forwarded_for.split(",")[0].strip()
+    return request.client.host
+
+
+limiter = Limiter(key_func=get_real_ip, default_limits=[config.RATE_LIMIT_DEFAULT])
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.add_middleware(SlowAPIASGIMiddleware)
