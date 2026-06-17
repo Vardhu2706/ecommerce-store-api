@@ -89,7 +89,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"product_id\": \"prod_1\",\r\n  \"quantity\": 2\r\n}",
+              "raw": "{\r\n  \"product_id\": \"prod_2\",\r\n  \"quantity\": 2\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -178,14 +178,14 @@
               }
             ],
             "url": {
-              "raw": "{{base_url}}/cart/items/prod_2",
+              "raw": "{{base_url}}/cart/items/prod_1",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
                 "cart",
                 "items",
-                "prod_2"
+                "prod_1"
               ]
             }
           },
