@@ -11,7 +11,7 @@ from typing import Optional
 
 
 logger = logging.getLogger(__name__)
-router = APIRouter(tags=["Cart"])
+router = APIRouter(tags=["Admin"])
 
 
 def _validate_admin_key(x_admin_key: str | None) -> None:
